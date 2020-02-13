@@ -11,6 +11,9 @@ public class Car {
     private int maxFuel;
     private int currentFuel;
     private int consumption;
+    private double mileage;
+    private int passengers;
+    private int seats;
     
     public Car() {
         this.model = "";
@@ -19,6 +22,9 @@ public class Car {
         this.maxFuel = 0;
         this.currentFuel = 0;
         this.consumption = 0;
+        this.mileage = 0;
+        this.passengers = 1;
+        this.seats = 5;
     }
     
     public Car(String customModel, int customBuildYear, String customColor, int customMaxFuel) {
@@ -26,15 +32,20 @@ public class Car {
         this.buildYear = customBuildYear;
         this.color = customColor;
         this.maxFuel = customMaxFuel;
+        this.passengers = 1;
+        this.seats = 5;
     }
     
-    public Car(String customModel, int customBuildYear, String customColor, int customMaxFuel, int customCurrentFuel, int customConsumption) {
+    public Car(String customModel, int customBuildYear, String customColor, int customMaxFuel, int customCurrentFuel, int customConsumption, double customMileage) {
         this.model = customModel;
         this.buildYear = customBuildYear;
         this.color = customColor;
         this.maxFuel = customMaxFuel;
         this.consumption = customConsumption;
         this.currentFuel = customCurrentFuel;
+        this.mileage = customMileage;
+        this.passengers = 1;
+        this.seats = 5;
     }
     
     public String getModel() {
@@ -88,7 +99,41 @@ public class Car {
     public String getVehicleType() {
         return this.vehicleType;
     }
-        
+    
+    public double getMileage() {
+        return this.mileage;
+    }
+    
+    public void setMileage(double customMileage) {
+        this.mileage = customMileage;
+    }
+
+    public int getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(int maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public int getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(int passengers) {
+        this.passengers = passengers;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+    
+    
+            
     public void showData() {
         System.out.println("Model: " + this.getModel());
         System.out.println("Godina proizvodnje: " + this.getBuildYear());
@@ -96,19 +141,67 @@ public class Car {
         System.out.println("Potrosnja: " + this.getConsumption());
         System.out.println("Stanje rezervoara " + this.getCurrentFuel());
         System.out.println("Kapacitet rezervoara je: " + this.getMaxFuel());
+        System.out.println("Predjena kilometraza je: " + this.getMileage());
+        System.out.println("Broj putnika: " + this.getPassengers());
         System.out.println();
     }
     
-    public void travel(int distanceTraveled) {
-        // 1. definisati novi atribut 'mileage'
-        // 2. napraviti get i set metode
-        // 3. prosiriti jedan od konstruktora da moze da se setuje i mileage
-        //
-        // 4. kolicina goriva da se smanji za onoliko koliko je potroseno 
-        // 5. kilometraza treba da se uveca
-        //  
-        
-        // opciono: novi atribut za stanje motora, da li je automobil ukljucen
+    public void travel(int distance) {
+        if (this.getCurrentFuel() > (distance * this.getConsumption()) / 100) {
+            this.mileage = this.getMileage() + distance;
+            this.currentFuel = this.getCurrentFuel() - (distance * this.getConsumption()) / 100;
+            System.out.println("Uspesno ste putovali: " + distance + " kilometara.");
+        } else {
+            System.out.println("Nema dovoljna goriva za put od: " + distance);
+        }
+    }
+    
+    public void fuelUp(int refill) {
+        int emptySpace = this.getMaxFuel() - this.getCurrentFuel();
+                
+        if (refill <= emptySpace) {
+            this.currentFuel = this.getCurrentFuel() + refill;
+            System.out.println("Uspesno ste sipali " + refill + ". Novo stanje je: " + this.getCurrentFuel());
+        } else {
+            this.currentFuel = this.getMaxFuel();
+            System.out.println("Rezervoar je pun. Sipali ste: " + emptySpace);
+        }
+    }
+    
+    public void getIn() {
+        if (this.getPassengers() + 1 <= this.getSeats()) {
+            this.setPassengers(this.getPassengers() + 1);
+            System.out.println("Jedna osoba je usla u auto. Novo stanje je: " + this.getPassengers());            
+        } else {
+            System.out.println("Automobil je pun. Nema mesta za jos jednog putnika");
+        }
+    } 
+    
+    public void getIn(int numberOfPeople) {
+        if (this.getPassengers() + numberOfPeople <= this.getSeats()) {
+            this.setPassengers(this.getPassengers() + numberOfPeople);
+            System.out.println(numberOfPeople + " osoba je usla u auto. Novo stanje je: " + this.getPassengers());            
+        } else {
+            System.out.println("U automobilu je trenutno " + this.getPassengers() + " putnika. Ne mogu uci jos " + numberOfPeople);
+        }
+    }
+    
+    public void getOut() {
+        if (this.getPassengers() - 1 >= 0) {
+            this.setPassengers(this.getPassengers() - 1);
+            System.out.println("Jedna osoba je izasla iz auta. Novo stanje je: " + this.getPassengers());            
+        } else {
+            System.out.println("Automobil je prazan. Nema ko da izadje.");
+        }
+    }
+    
+    public void getOut(int numberOfPeople) {
+        if (this.getPassengers() - numberOfPeople >= 0) {
+            this.setPassengers(this.getPassengers() - numberOfPeople);
+            System.out.println(numberOfPeople + " osoba je izaslo iz auta. Novo stanje je: " + this.getPassengers());            
+        } else {
+            System.out.println("U automobilu je trenutno " + this.getPassengers() + " putnika. Ne mogu izaci " + numberOfPeople);
+        }
     }
     
 }
